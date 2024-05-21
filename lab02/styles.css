@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section h2 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+
+.section p {
+    margin: 5px 0;
+}
+
+.section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.section ul li {
+    margin: 5px 0;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.title p {
+    margin: 5px 0;
+    font-size: 1.2em;
+}
