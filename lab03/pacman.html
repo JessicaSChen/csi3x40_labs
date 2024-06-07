@@ -15,14 +15,22 @@
 
 <body >
     <h1>Pacman</h1>
-    <button onclick="createGame()" class="button">Start Game</button>
+    <p>Your current level is: <span id="currentLevel">1</span></p>
+    <button onclick="createGame(10)" class="button">Start Game</button>
+    <div id="gameDisplay"> </div>
+    <div class="buttons">
+        <button onclick="moveLeft(game)" class="button">Move Left</button>
+        <button onclick="moveRight(game)" class="button">Move Right</button>
+    </div>
 </body>
 </html>
     
 <script>
 var pacman = "C", ghost = "^", fruit = "@", pellet = ".";
 var posPacman = 0, posFruit = 0, posGhost = 0;
-var size = 0, game, score;
+var size = 0, game, score, level = 1;
+const gameDisplay = document.getElementById('gameDisplay');
+const levelDisplay = document.getElementById("currentLevel").textContent;
 
 function createGame(n){
     size = n;
@@ -34,52 +42,81 @@ function createGame(n){
     game[posPacman] = pacman;
     posFruit = 0;
     while (n == posPacman){
-        posFruit = getRandomNumber(1, n)
+        posFruit = getRandomNumber(1, n);
     }
     game[posFruit] = fruit;
-    posGhost = getRandomNumber(1, n)
-    game[posGhost] = ghost + game[posGhost]
+    posGhost = getRandomNumber(1, n);
+    game[posGhost] = ghost + game[posGhost];
     
     // Print game
     console.log(game);
+    displayGame(game);
+}
+
+function moveLeft(){
+    moveLeft(game);
 }
 
 function moveLeft(game){
     var nextPos = 0;
     posPacman == 0 ? nextPos = size - 1: nextPos = posPacman - 1
 
-    game[posPacman] = ""
-    process(game, nextPos)
-    game[nextPos] = pacman
+    game[posPacman] = "";
+    process(game, nextPos);
+    game[nextPos] = pacman;
     posPacman = nextPos;
 
     console.log(game);
+    displayGame(game);
+}
+
+function moveRight(){
+    moveRight(game);
 }
 
 function moveRight(game){
     var nextPos = 0;
     posPacman == size - 1 ? nextPos = 0: nextPos = posPacman + 1
 
-    game[posPacman] = ""
-    process(game, nextPos)
-    game[nextPos] = pacman
+    game[posPacman] = "";
+    process(game, nextPos);
+    game[nextPos] = pacman;
     posPacman = nextPos;
 
     console.log(game);
+    displayGame(game);
 }
 
 function process(game, a){ // process pacman eating pellet, if pacman lands on pellet
     if(game[a] == pellet){
         score += 10;
-
     }else if(game[a] == fruit){
         score += 100
-
     }else if(game[a[0]] == ghost){
-
     }
-    
 
+    // Completion of level
+    if(countItem(game, pellet) == 0){
+        console.log("Completion of Level " + level);
+        level += 1;
+        levelDisplay.textContent = level;
+        console.log("Advance to Level " + level);
+        createGame(size + 5);
+    }
+}
+
+function displayGame(game){
+    gameDisplay.textContent = JSON.stringify(game);
+}
+
+function countItem(game, item){
+    var count = 0;
+    for (let i = 0; i < game.length; i++) {
+        if (game[i] === item) {
+            count += 1;
+        }
+    }
+    return count;
 }
 
 function getRandomNumber(low, high){ // inclusive of low and high bounds
