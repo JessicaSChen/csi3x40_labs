@@ -20,15 +20,9 @@
 </html>
     
 <script>
-var pacman = "C";
-var ghost = "^";
-var fruit = "@";
-var pellet = ".";
-var posPacman = 0;
-var posFruit = 0;
-var posGhost = 0;
-var size = 0;
-var game;
+var pacman = "C", ghost = "^", fruit = "@", pellet = ".";
+var posPacman = 0, posFruit = 0, posGhost = 0;
+var size = 0, game, score;
 
 function createGame(n){
     size = n;
@@ -52,10 +46,11 @@ function createGame(n){
 
 function moveLeft(game){
     var nextPos = 0;
-    posPacman == 1 ? nextPos = size: nextPos = posPacman - 1
+    posPacman == 0 ? nextPos = size - 1: nextPos = posPacman - 1
 
-    game[posPacman] = pellet
-    game[nextPos] = pacman + game[nextPos]
+    game[posPacman] = ""
+    process(game, nextPos)
+    game[nextPos] = pacman
     posPacman = nextPos;
 
     console.log(game);
@@ -63,13 +58,28 @@ function moveLeft(game){
 
 function moveRight(game){
     var nextPos = 0;
-    posPacman == size ? nextPos = 1: nextPos = posPacman + 1
+    posPacman == size - 1 ? nextPos = 0: nextPos = posPacman + 1
 
-    game[posPacman] = pellet
-    game[nextPos] = pacman + game[nextPos]
+    game[posPacman] = ""
+    process(game, nextPos)
+    game[nextPos] = pacman
     posPacman = nextPos;
 
     console.log(game);
+}
+
+function process(game, a){ // process pacman eating pellet, if pacman lands on pellet
+    if(game[a] == pellet){
+        score += 10;
+
+    }else if(game[a] == fruit){
+        score += 100
+
+    }else if(game[a[0]] == ghost){
+
+    }
+    
+
 }
 
 function getRandomNumber(low, high){ // inclusive of low and high bounds
