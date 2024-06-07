@@ -24,22 +24,51 @@ var pacman = "C";
 var ghost = "^";
 var fruit = "@";
 var pellet = ".";
+var posPacman = 0;
+var posFruit = 0;
+var posGhost = 0;
+var size = 0;
+var game;
 
 function createGame(n){
-    // Initialize Game
-    const game = new Array(n).fill(pellet);
+    size = n;
 
-    const PosPacman = getRandomNumber(1, n)
-    game[PosPacman] = pacman;
-    const PosFruit = 0;
-    while (n == PosPacman){
-        PosFruit = getRandomNumber(1, n)
+    // Initialize Game
+    game = new Array(n).fill(pellet);
+
+    posPacman = getRandomNumber(1, n)
+    game[posPacman] = pacman;
+    posFruit = 0;
+    while (n == posPacman){
+        posFruit = getRandomNumber(1, n)
     }
-    game[PosFruit] = fruit;
-    const PosGhost = getRandomNumber(1, n)
-    game[PosGhost] = ghost + game[PosGhost]
+    game[posFruit] = fruit;
+    posGhost = getRandomNumber(1, n)
+    game[posGhost] = ghost + game[posGhost]
     
-    // Print array
+    // Print game
+    console.log(game);
+}
+
+function moveLeft(game){
+    var nextPos = 0;
+    posPacman == 1 ? nextPos = size: nextPos = posPacman - 1
+
+    game[posPacman] = pellet
+    game[nextPos] = pacman + game[nextPos]
+    posPacman = nextPos;
+
+    console.log(game);
+}
+
+function moveRight(game){
+    var nextPos = 0;
+    posPacman == size ? nextPos = 1: nextPos = posPacman + 1
+
+    game[posPacman] = pellet
+    game[nextPos] = pacman + game[nextPos]
+    posPacman = nextPos;
+
     console.log(game);
 }
 
