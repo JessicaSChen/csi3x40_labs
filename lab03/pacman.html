@@ -1,0 +1,49 @@
+
+<!-- You can write all your javascript within `<script>` directly
+    within `pacman.html`, or link to an external file `pacman.js`.
+    
+    You do not need to implement a functional visual game for
+    full marks, it is sufficient to _demonstrate_ the proper behaviour
+    of your code through "console.log()" like assertions.
+    
+    Commit these changes and push to [GitHub](https://github.com/). -->
+
+<html>
+<head>
+    <title>Pacman</title>
+</head>
+
+<body >
+    <h1>Pacman</h1>
+    <button onclick="createGame()" class="button">Start Game</button>
+</body>
+</html>
+    
+<script>
+var pacman = "C";
+var ghost = "^";
+var fruit = "@";
+var pellet = ".";
+
+function createGame(n){
+    // Initialize Game
+    const game = new Array(n).fill(pellet);
+
+    const PosPacman = getRandomNumber(1, n)
+    game[PosPacman] = pacman;
+    const PosFruit = 0;
+    while (n == PosPacman){
+        PosFruit = getRandomNumber(1, n)
+    }
+    game[PosFruit] = fruit;
+    const PosGhost = getRandomNumber(1, n)
+    game[PosGhost] = ghost + game[PosGhost]
+    
+    // Print array
+    console.log(game);
+}
+
+function getRandomNumber(low, high){ // inclusive of low and high bounds
+    return Math.floor(low + Math.random() * high);
+}
+</script>
