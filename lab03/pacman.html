@@ -30,22 +30,25 @@ var pacman = "C", ghost = "^", fruit = "@", pellet = ".";
 var posPacman = 0, posFruit = 0, posGhost = 0;
 var size = 0, game, score, level = 1;
 const gameDisplay = document.getElementById('gameDisplay');
-const levelDisplay = document.getElementById("currentLevel").textContent;
+const levelDisplay = document.getElementById("currentLevel");
 
 function createGame(n){
     size = n;
 
     // Initialize Game
-    game = new Array(n).fill(pellet);
+    game = new Array(n-1).fill(pellet);
 
     posPacman = getRandomNumber(1, n)
     game[posPacman] = pacman;
-    posFruit = 0;
-    while (n == posPacman){
+
+    do {
         posFruit = getRandomNumber(1, n);
-    }
+    } while (posFruit == posPacman);
     game[posFruit] = fruit;
-    posGhost = getRandomNumber(1, n);
+
+    do {
+        posGhost = getRandomNumber(1, n);
+    } while (posGhost == posPacman);
     game[posGhost] = ghost + game[posGhost];
     
     // Print game
@@ -53,35 +56,34 @@ function createGame(n){
     displayGame(game);
 }
 
-function moveLeft(){
-    moveLeft(game);
+function move(game, currentPos, nextPos, chr){
+    if(game[currentPos].length == 1){
+        game[currentPos] = "";
+    }else{
+        game[currentPos] = game[currentPos].slice(1)
+    }
+    process(game, nextPos);
+    if(chr == pacman){
+        game[nextPos] = pacman;
+        posPacman = nextPos;
+    }else if(chr == ghost){
+        game[nextPos] = ghost + game[nextPos];
+        posGhost = nextPos;
+    }
+    currentPos = nextPos;
 }
 
 function moveLeft(game){
-    var nextPos = 0;
-    posPacman == 0 ? nextPos = size - 1: nextPos = posPacman - 1
-
-    game[posPacman] = "";
-    process(game, nextPos);
-    game[nextPos] = pacman;
-    posPacman = nextPos;
+    var nextPos = findNextPosition("left", posPacman)
+    move(game, posPacman, nextPos, pacman)
 
     console.log(game);
     displayGame(game);
 }
 
-function moveRight(){
-    moveRight(game);
-}
-
 function moveRight(game){
-    var nextPos = 0;
-    posPacman == size - 1 ? nextPos = 0: nextPos = posPacman + 1
-
-    game[posPacman] = "";
-    process(game, nextPos);
-    game[nextPos] = pacman;
-    posPacman = nextPos;
+    var nextPos = findNextPosition("right", posPacman)
+    move(game, posPacman, nextPos, pacman)
 
     console.log(game);
     displayGame(game);
@@ -101,12 +103,35 @@ function process(game, a){ // process pacman eating pellet, if pacman lands on p
         level += 1;
         levelDisplay.textContent = level;
         console.log("Advance to Level " + level);
+        game = null;
         createGame(size + 5);
+        displayGame(game);
     }
+}
+
+var interval = window.setInterval(moveGhost, 2000);
+
+function moveGhost(){
+    var nextPos = 0;
+    getRandomNumber(0, 1) ? nextPos = findNextPosition("left", posGhost): nextPos = findNextPosition("right", posGhost);
+    move(game, posGhost, nextPos, ghost)
+
+    // console.log(game);
+    displayGame(game);
 }
 
 function displayGame(game){
     gameDisplay.textContent = JSON.stringify(game);
+}
+
+function findNextPosition(direction, position){
+    newPosition = 0;
+    if(direction == "left"){ // Move left
+        position == 0 ? newPosition = size - 1: newPosition = position - 1
+    }else{ // Move right
+        position == size - 1 ? newPosition = 0: newPosition = position + 1
+    }
+    return newPosition;
 }
 
 function countItem(game, item){
